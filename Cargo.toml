@@ -1,0 +1,36 @@
+[package]
+name = "jexrey_alarm"
+version = "1.0.0"
+edition = "2021"
+authors = ["Jexrey Corporation"]
+description = "JEXREY ALARM CONTROL SYSTEM — advanced multi-alarm command console"
+
+[[bin]]
+name = "JEXREYAlarm"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "unwind"
+strip = true
+
+[dependencies]
+eframe = { version = "0.27", default-features = false, features = ["glow", "default_fonts", "persistence"] }
+egui = "0.27"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = { version = "0.4", features = ["serde"] }
+rodio = { version = "0.19", default-features = false, features = ["symphonia-all"] }
+sysinfo = "0.30"
+dirs = "5"
+
+# rfd needs an explicit UI backend feature only on Linux/BSD (gtk3 or xdg-portal).
+# On Windows it links the native Win32 common-item-dialog directly, no feature needed.
+# On macOS it links AppKit directly, no feature needed either.
+[target.'cfg(target_os = "linux")'.dependencies]
+rfd = { version = "0.14", default-features = false, features = ["gtk3"] }
+
+[target.'cfg(not(target_os = "linux"))'.dependencies]
+rfd = { version = "0.14", default-features = false }
